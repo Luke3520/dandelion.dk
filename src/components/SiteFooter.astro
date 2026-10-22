@@ -1,0 +1,47 @@
+---
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/routes';
+import { site } from '../site';
+import Hill from './art/Hill.astro';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = ui[locale];
+---
+<footer class="contact night">
+  <Hill fill="var(--night)" shape="dome" class="crest" />
+  <div class="wrap grid">
+    <div>
+      <h2>{t.footerTitle}</h2>
+      <p class="muted">{t.footerText}</p>
+      <p><a class="email display" href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
+    <div class="side">
+      <p><a class="button" href={t.footerFormHref}>{t.footerForm}</a></p>
+      <p><a href={site.linkedin}>LinkedIn</a></p>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <p>{site.name} · CVR {site.cvr} · {site.postalCode} {site.city}</p>
+    <p><a href={t.privacyHref}>{t.privacy}</a> · {t.noCookies}</p>
+  </div>
+</footer>
+
+<style>
+  .contact { position: relative; padding: 2rem 0 3rem; }
+  .contact :global(.crest) { position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem 4rem; align-items: end; }
+  h2 { color: #FFFFFF; margin-bottom: 1rem; }
+  a { color: #FFFFFF; }
+  p { max-width: var(--measure); }
+  .email { font-size: clamp(1.5rem, 3.6vw, 2.4rem); text-decoration-color: var(--yellow); word-break: break-word; }
+  .side { text-align: right; }
+  .side .button { color: var(--ink); }
+  .legal { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--night-card); color: var(--night-muted); font-size: var(--text-small); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 2rem; }
+  .legal p { margin: 0; }
+  .legal a { color: var(--night-muted); }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    .side { text-align: left; }
+  }
+</style>

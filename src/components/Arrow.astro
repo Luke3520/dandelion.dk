@@ -1,0 +1,11 @@
+---
+// The long thin arrow used after links. Decorative: the link text carries the meaning.
+---
+<svg class="arrow" viewBox="0 0 28 12" width="28" height="12" aria-hidden="true" focusable="false">
+  <path d="M0 6 H26 M21 1 L26.5 6 L21 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+
+<style>
+  .arrow { flex: none; transition: transform 0.2s ease; }
+  :global(a:hover) > .arrow { transform: translateX(4px); }
+</style>

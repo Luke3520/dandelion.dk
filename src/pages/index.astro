@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import CardGrid from '../components/CardGrid.astro';
+import CaseList from '../components/CaseList.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import ServiceList from '../components/ServiceList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import NoteList from '../components/NoteList.astro';
+import Arrow from '../components/Arrow.astro';
+import CrackFlower from '../components/art/CrackFlower.astro';
+import { getCases, getNotes } from '../lib/collections';
+import { organisation } from '../lib/jsonld';
+import { trust } from '../data/trust';
+import { prices, kr } from '../data/prices';
+
+const cases = await getCases();
+const notes = (await getNotes()).slice(0, 3);
+
+const copy = {
+  title: 'Dandelion | Hjemmesider, systemer og rådgivning til små virksomheder',
+  description:
+    'Dandelion er et lille digitalt studie i København. Vi bygger hjemmesider, værktøjer og integrationer og hjælper små virksomheder med de tekniske beslutninger.',
+  heroTitle: 'Små systemer, der får hverdagen til at køre.',
+  heroLede:
+    'Dandelion er et lille digitalt studie i København. Vi bygger hjemmesider, værktøjer og integrationer og hjælper med de tekniske beslutninger, for virksomheder der er for små til et it-hus, men for store til papir og regneark.',
+  artLabel: 'Tegning af mælkebøtter på en bakke om natten. Fra en mælkebøttes fnug flyver frø ud over himlen.',
+  problems: [
+    {
+      title: '“Vi har brug for en hjemmeside, folk kan finde og bruge.”',
+      text: 'Hjemmesider med god struktur, lokal SEO og tilgængelighed, så kunderne finder jer og kan bruge siden.',
+      href: '/ydelser/hjemmesider/',
+      linkLabel: 'Hjemmesider og SEO',
+      art: 'web' as const,
+    },
+    {
+      title: '“Kassen og webshoppen taler ikke sammen.”',
+      text: 'Integrationer mellem kasse, webshop, lager og bogføring, og værktøjer der erstatter papir og regneark.',
+      href: '/ydelser/systemer/',
+      linkLabel: 'Systemer og integrationer',
+      art: 'systems' as const,
+    },
+    {
+      title: '“Vi skal vælge, og vi vil ikke gætte.”',
+      text: 'Hjælp til tekniske beslutninger: betaling, kassesystem, leverandører, eller sparring til jeres egne udviklere.',
+      href: '/ydelser/raadgivning/',
+      linkLabel: 'Rådgivning',
+      art: 'advice' as const,
+    },
+  ],
+  services: [
+    { label: 'Hjemmesider og SEO', href: '/ydelser/hjemmesider/' },
+    { label: 'Systemer og integrationer', href: '/ydelser/systemer/' },
+    { label: 'Kasse og webshop', href: '/ydelser/systemer/' },
+    { label: 'Systemtjek og rådgivning', href: '/ydelser/raadgivning/' },
+    { label: 'Sparring til udviklere', href: '/ydelser/raadgivning/' },
+    { label: 'Priser', href: '/priser/' },
+  ],
+};
+---
+<BaseLayout title={copy.title} description={copy.description} routeKey="home" jsonLd={organisation}>
+  <Hero title={copy.heroTitle} lede={copy.heroLede} artLabel={copy.artLabel}>
+    <a class="button" href="/ydelser/raadgivning/">Book et Systemtjek</a>
+    <a href="#arbejde">Se hvad vi har lavet</a>
+  </Hero>
+
+  <Section title="Udvalgte opgaver" id="arbejde" tone="night">
+    <LogoMarquee cases={cases} label="Kunder vi har arbejdet for" />
+    <CaseList cases={cases} layout="row" label="Udvalgte opgaver" />
+    <p class="after"><a class="button" href="/arbejde/">Se alt vores arbejde</a></p>
+  </Section>
+
+  <Section title="Hvad driller?">
+    <CardGrid items={copy.problems} columns={3} variant="cards" quote />
+  </Section>
+
+  <Section title={trust.da.title} intro={trust.da.intro} tone="mist" center>
+    <CardGrid items={trust.da.items} columns={4} variant="icons" />
+  </Section>
+
+  <ServiceList label="Det kan vi hjælpe med" items={copy.services} />
+
+  <Section>
+    <div class="statement">
+      <div>
+        <h2>Jeres digitale totalentreprenør</h2>
+        <p class="big display">Én aftale, ét ansvar og specialister, når opgaven kræver det.</p>
+      </div>
+      <div>
+        <p>Ligesom i byggeriet står vi for hele opgaven, fra rådgivning og design til det færdige resultat og driften bagefter. Når der skal en specialist til, henter vi en ind fra vores netværk, og I ved altid, hvem der laver hvad.</p>
+        <p><a class="arrow-link" href="/om/">Mød os<Arrow /></a></p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="mist">
+    <div class="vega">
+      <div>
+        <h2>Project Vega</h2>
+        <p class="big display">Teknologi skal tjene de mennesker, den er til for.</p>
+        <p>Vi giver tid til organisationer, der arbejder med og for mennesker med handicap, og til de mennesker, der er en del af dem. Med software, hjemmesider og undervisning, gratis eller til kostpris.</p>
+        <p class="actions"><a class="button dark" href="/vega/">Læs om Project Vega</a></p>
+      </div>
+      <CrackFlower label="Tegning af en gul mælkebøtte, der vokser op gennem en revne i asfalten i morgenlys." />
+    </div>
+  </Section>
+
+  {notes.length > 0 && (
+    <Section title="Noter">
+      <NoteList notes={notes} />
+      <p class="after"><a class="arrow-link" href="/noter/">Alle noter<Arrow /></a></p>
+    </Section>
+  )}
+
+  <CtaBand
+    title="Start med et Systemtjek"
+    text="To timer sammen med os om jeres systemer eller en teknisk beslutning. Bagefter får I en skriftlig anbefaling, og prisen trækkes fra, hvis I går videre med os."
+    price={`${kr(prices.systemtjek, 'da')} ekskl. moms`}
+    href="/kontakt/"
+    label="Book et Systemtjek"
+  />
+</BaseLayout>
+
+<style>
+  .after { margin: 2.5rem 0 0; }
+  .statement, .vega { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem 5rem; align-items: center; }
+  .statement { align-items: end; }
+  .big { font-size: var(--display-l); line-height: 1.2; margin: 0 0 1.5rem; }
+  .statement h2, .vega h2 { font-family: var(--font); font-weight: 700; font-size: var(--text-small); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.25rem; }
+  .statement p:not(.big) { font-size: var(--lede); }
+  @media (max-width: 760px) {
+    .statement, .vega { grid-template-columns: 1fr; }
+  }
+</style>

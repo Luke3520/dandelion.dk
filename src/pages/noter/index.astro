@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SpotArt from '../../components/art/SpotArt.astro';
+import Section from '../../components/Section.astro';
+import NoteList from '../../components/NoteList.astro';
+import { getNotes } from '../../lib/collections';
+
+const notes = await getNotes();
+---
+<BaseLayout title="Noter" description="Korte noter om hjemmesider, systemer, tilgængelighed og it-sikkerhed for små virksomheder.">
+  <Hero title="Noter" lede="Korte noter om det, vi lærer undervejs: hjemmesider, systemer, tilgængelighed og sikkerhed for små virksomheder.">
+    <SpotArt slot="art" name="notes" />
+  </Hero>
+  <Section title="Alle noter" hideTitle>
+    <NoteList notes={notes} />
+  </Section>
+</BaseLayout>

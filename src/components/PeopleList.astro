@@ -1,0 +1,27 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import type { Locale } from '../i18n/routes';
+
+interface Props { people: CollectionEntry<'people'>[]; locale?: Locale; withBio?: boolean }
+const { people, locale = 'da', withBio = false } = Astro.props;
+const rendered = await Promise.all(people.map(async (person) => ({ person, Content: (await render(person)).Content })));
+---
+<ul class:list={['people', { bios: withBio }]}>
+  {rendered.map(({ person: { data }, Content }) => (
+    <li>
+      <h3>{data.link ? <a href={data.link}>{data.name}</a> : data.name}</h3>
+      <p class="role">{locale === 'en' ? data.roleEn ?? data.role : data.role}</p>
+      {withBio && (locale === 'en' && data.bioEn ? <p>{data.bioEn}</p> : locale === 'da' && <div class="bio"><Content /></div>)}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .people { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+  .bios { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
+  li { background: var(--paper); border-radius: var(--radius); padding: 1.75rem; }
+  h3 { margin: 0; font-family: var(--font-display); font-weight: var(--display-weight); font-variation-settings: var(--display-soft); font-size: 1.6rem; }
+  .role { color: var(--muted); margin: 0 0 0.75rem; }
+  .bio :global(p) { max-width: var(--measure); }
+  @media (max-width: 760px) { .people, .bios { grid-template-columns: 1fr; } }
+</style>

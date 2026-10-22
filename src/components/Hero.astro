@@ -1,0 +1,60 @@
+---
+// The night-sky band at the top of every page. With `artLabel` it becomes the large home hero with the meadow.
+// `ground` is the colour of the field below, so the hill blends into the next section.
+// Pages can pass a drawing in the "art" slot; it sits on a pale blob to the right of the text.
+import Meadow from './art/Meadow.astro';
+import Hill from './art/Hill.astro';
+
+interface Props { title: string; lede?: string; artLabel?: string; ground?: string }
+const { title, lede, artLabel, ground } = Astro.props;
+const home = Boolean(artLabel);
+const hasArt = Astro.slots.has('art');
+---
+<section class:list={['hero', 'night', { home, 'with-art': hasArt }]}>
+  <Meadow variant={home ? 'home' : 'page'} plants={!hasArt} />
+  <div class="wrap content">
+    <div class="text">
+      <slot name="before" />
+      <h1>{title}</h1>
+      {lede && <p class="lede">{lede}</p>}
+      <div class="actions"><slot /></div>
+      <slot name="after" />
+      {artLabel && <p class="visually-hidden">{artLabel}</p>}
+    </div>
+    {hasArt && <div class="hero-art"><slot name="art" /></div>}
+  </div>
+  <Hill fill={ground ?? (home ? 'var(--night)' : 'var(--paper)')} class="edge" />
+</section>
+
+<style>
+  .hero { position: relative; background: var(--night-sky); isolation: isolate; }
+  .content { position: relative; padding-top: clamp(2.5rem, 6vw, 5rem); padding-bottom: clamp(2rem, 4vw, 3rem); }
+  .hero :global(.edge) { position: relative; z-index: 1; margin-top: -1px; }
+  h1 { max-width: 20ch; color: #FFFFFF; }
+  .lede { color: var(--night-muted); }
+  .actions:empty { display: none; }
+  .actions { margin-top: 2rem; }
+  .content :global(a:not(.button)) { color: var(--yellow); font-weight: 700; }
+
+  .with-art .content { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 2rem 4rem; align-items: center; }
+  .with-art h1 { max-width: 16ch; }
+  /* An organic pale shape behind the drawing, so dark ink lines read on the night sky. */
+  .hero-art {
+    background: var(--mist);
+    border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%;
+    padding: 9% 10%;
+    margin-bottom: calc(var(--hill) * -0.6);
+    transform: rotate(-2deg);
+  }
+  .hero-art :global(svg) { transform: rotate(2deg); }
+
+  .home .content { text-align: center; padding-top: clamp(3rem, 8vw, 6.5rem); padding-bottom: clamp(9rem, 20vw, 15rem); }
+  .home h1 { margin-inline: auto; max-width: 18ch; }
+  .home .lede { margin-inline: auto; }
+  .home .actions { justify-content: center; }
+  @media (max-width: 760px) {
+    .home .content { padding-bottom: 8.5rem; }
+    .with-art .content { grid-template-columns: 1fr; }
+    .hero-art { max-width: 15rem; width: 70%; justify-self: center; margin-bottom: 0; }
+  }
+</style>

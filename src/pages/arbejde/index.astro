@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SpotArt from '../../components/art/SpotArt.astro';
+import Section from '../../components/Section.astro';
+import CaseList from '../../components/CaseList.astro';
+import LogoMarquee from '../../components/LogoMarquee.astro';
+import { getCases } from '../../lib/collections';
+
+const cases = await getCases();
+---
+<BaseLayout
+  title="Arbejde"
+  description="Udvalgte opgaver: systemer, integrationer og tilgængelige hjemmesider for små virksomheder og foreninger."
+>
+  <Hero
+    title="Udvalgte opgaver"
+    lede="Et udvalg af det, vi har bygget og er i gang med. Vi nævner kun kunder ved navn, når de har sagt ja til det."
+  >
+    <SpotArt slot="art" name="work" />
+  </Hero>
+  <Section title="Alle opgaver" hideTitle>
+    <CaseList cases={cases} />
+    <LogoMarquee cases={cases} label="Kunder vi har arbejdet for" />
+  </Section>
+</BaseLayout>

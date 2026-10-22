@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import SpotArt from '../components/art/SpotArt.astro';
+---
+<BaseLayout title="Siden findes ikke" description="Siden findes ikke." noindex>
+  <Hero title="Siden findes ikke" lede="Måske er den flyttet, eller også er der en stavefejl i adressen. Page not found.">
+    <a class="button" href="/">Til forsiden</a>
+    <a href="/en/" lang="en">English</a>
+  </Hero>
+  <Section>
+    <div class="lost"><SpotArt name="lost" /></div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .lost { max-width: 26rem; margin: 0 auto; }
+</style>

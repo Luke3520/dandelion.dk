@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Prose from '../../components/Prose.astro';
+import { site } from '../../site';
+---
+<BaseLayout title="Privacy" description="How Dandelion handles personal data." locale="en" routeKey="privacy">
+  <Hero title="Privacy">
+    <p slot="after" class="lede">Last updated 21 October 2026. This is a summary; the <a href="/privatlivspolitik/" hreflang="da">Danish privacy policy</a> is the full version.</p>
+  </Hero>
+  <Section>
+    <Prose>
+      <h2>Who is responsible</h2>
+      <p>{site.name}, CVR {site.cvr}, {site.postalCode} {site.city}, Denmark. Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <h2>Cookies and tracking</h2>
+      <p>This site uses no cookies, no analytics and no tracking. Fonts are served from our own server, so your IP address is not sent to Google.</p>
+      <h2>When you write to us</h2>
+      <p>We store what you send through our forms: name, email, organisation if given, topic, how you would like to be contacted, and your message. We use it only to reply to you and, for Project Vega, to get an overview of what organisations need. Contact requests rely on our legitimate interest in replying (GDPR art. 6(1)(f) and (b)); Project Vega requests rely on your consent (art. 6(1)(a)), which you can withdraw at any time.</p>
+      <p>Please do not include information about health or disability. If you do, we delete it once we have read your request, unless you have explicitly asked us to use it.</p>
+      <h2>How long we keep it</h2>
+      <p>Requests are deleted automatically 12 months after we receive them, unless they lead to an agreement and accounting law requires us to keep records. To stop spam we keep a one-way hash of your IP address for one day; we never store the address itself.</p>
+      <h2>Who processes it for us</h2>
+      <p>The site and forms run on Cloudflare, which stores the requests and emails us a notification. Cloudflare is certified under the EU-US Data Privacy Framework. We do not share your data with anyone else.</p>
+      <h2>Your rights</h2>
+      <p>You can ask to see, correct or delete your data and object to how we use it. You can also complain to the Danish Data Protection Agency, <a href="https://www.datatilsynet.dk">Datatilsynet</a>.</p>
+    </Prose>
+  </Section>
+</BaseLayout>

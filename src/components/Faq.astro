@@ -1,0 +1,21 @@
+---
+export interface Question { q: string; a: string }
+interface Props { items: Question[] }
+const { items } = Astro.props;
+---
+<div class="faq">
+  {items.map((item) => (
+    <details>
+      <summary>{item.q}</summary>
+      <p>{item.a}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { max-width: 48rem; }
+  details { background: var(--paper); border-radius: var(--radius-small); padding: 1.1rem 1.4rem; margin-bottom: 0.75rem; }
+  summary { font-weight: 700; cursor: pointer; }
+  summary::marker { color: var(--stem); }
+  p { margin: 0.75rem 0 0; color: var(--muted); }
+</style>

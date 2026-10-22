@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Steps from '../../components/Steps.astro';
+import PeopleList from '../../components/PeopleList.astro';
+import RequestForm from '../../components/RequestForm.astro';
+import IntakeIntro from '../../components/IntakeIntro.astro';
+import CrackFlower from '../../components/art/CrackFlower.astro';
+import { getPeople } from '../../lib/collections';
+
+const collaborators = await getPeople('collaborators');
+const know = ['Who you are', 'Which organisation you are part of', 'How best to reach you', 'What the problem is'];
+const offer = [
+  { title: 'Software and websites', text: 'Accessible websites, small tools and help with the systems you already use.' },
+  { title: 'Teaching and materials', text: 'Plain language, easy-read texts and teaching in digital tools, from our linguist.' },
+  { title: 'Advice', text: 'A second opinion on technical choices, vendors and quotes you have received.' },
+];
+const steps = [
+  { title: 'You write to us', text: 'Organisations, and the people who are part of them, can tell us what they need.' },
+  { title: 'We collect the requests', text: 'Every request goes on a shared list, so we can see what matters most.' },
+  { title: 'We look for patterns', text: 'When many people ask for the same thing, or an organisation is behind a request, we take it on.' },
+  { title: 'We help', text: 'For free or at cost, depending on the size of the job. We always agree on it before we start.' },
+];
+---
+<BaseLayout
+  title="Project Vega"
+  description="Project Vega is Dandelion’s project where we give our time to organisations working with and for people with disabilities. Software, websites and teaching, for free or at cost."
+  locale="en"
+  routeKey="vega"
+>
+  <Hero title="Project Vega" lede="We give our time to organisations working with and for people with disabilities, and to the people who are part of them. With software, websites and teaching, for free or at cost." ground="var(--mist)">
+    <a class="button" href="#write">Write to Project Vega</a>
+  </Hero>
+
+  <Section tone="mist">
+    <IntakeIntro title="We’d like to know" items={know} />
+  </Section>
+
+  <Section>
+    <div class="promise">
+      <div>
+        <h2>Our promise to you</h2>
+        <p>If we can help, we will. If you are near Copenhagen, we are happy to come by and map things out with you. Otherwise we will set up a video call.</p>
+        <p>If we can’t help ourselves, we usually know someone we can point you to.</p>
+        <p class="free display">The first hour never costs you anything.</p>
+        <p><a class="button dark" href="#write">Write to us</a></p>
+      </div>
+      <CrackFlower label="Drawing of a yellow dandelion growing up through a crack in the asphalt in morning light." />
+    </div>
+  </Section>
+
+  <Section title="What we can help with" tone="mist" intro="Many associations and organisations need digital solutions but have neither the budget nor the people for them. Accessibility and plain language are things we work with every day, and Project Vega is how we put that to use where it matters.">
+    <CardGrid items={offer} columns={3} variant="cards" />
+  </Section>
+
+  <Section title="How it works"><Steps items={steps} /></Section>
+
+  <Section title="Not sure where to start?" id="write" tone="mist" intro="Fill in the form and we will get talking.">
+    <div class="form-card"><RequestForm kind="vega" locale="en" /></div>
+  </Section>
+
+  <Section title="Collaborators" intro="Project Vega is carried by a network of people who give their time and knowledge.">
+    {collaborators.length > 0 && <PeopleList people={collaborators} locale="en" />}
+    <p class="join">Want to take part? <a href="/en/contact/">Write to us</a>.</p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .promise { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem 5rem; align-items: center; }
+  .promise p:not(.free) { font-size: var(--lede); max-width: var(--measure); }
+  .free { font-size: var(--display-l); line-height: 1.2; margin: 1.5rem 0 2rem; }
+  .form-card { background: var(--paper); border-radius: var(--radius); padding: clamp(1.5rem, 4vw, 3rem); max-width: 48rem; }
+  .join { margin-top: 1.5rem; }
+  @media (max-width: 760px) { .promise { grid-template-columns: 1fr; } }
+</style>

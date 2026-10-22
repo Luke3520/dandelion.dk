@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SpotArt from '../../components/art/SpotArt.astro';
+---
+<BaseLayout title="Thank you" description="We have received your message." locale="en" routeKey="thanks" noindex>
+  <Hero title="Thank you for your message" lede="We have received it and will get back to you as soon as we can.">
+    <a class="button" href="/en/">Back to the home page</a>
+    <SpotArt slot="art" name="letter" />
+  </Hero>
+</BaseLayout>

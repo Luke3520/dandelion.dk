@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Prose from '../components/Prose.astro';
+import { site } from '../site';
+---
+<BaseLayout title="Privatlivspolitik" description="Sådan behandler Dandelion personoplysninger." routeKey="privacy">
+  <Hero title="Privatlivspolitik" lede="Senest opdateret 21. oktober 2026" />
+  <Section>
+    <Prose>
+      <h2>Hvem er ansvarlig</h2>
+      <p>{site.name}, CVR {site.cvr}, {site.postalCode} {site.city}. Du kan skrive til os på <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+
+      <h2>Cookies og sporing</h2>
+      <p>Siden bruger ingen cookies, ingen analyseværktøjer og ingen sporing. Skrifttyperne ligger på vores egen server, så din IP-adresse ikke sendes til Google.</p>
+
+      <h2>Når du skriver til os</h2>
+      <p>Når du bruger kontaktformularen eller Project Vegas formular, gemmer vi det, du skriver: navn, e-mail, eventuelt organisation, emne, hvordan du helst vil kontaktes, og din besked. Vi bruger det kun til at svare dig og, for Project Vega, til at få overblik over, hvad organisationer har brug for.</p>
+      <ul>
+        <li><strong>Kontaktformularen:</strong> Grundlaget er vores legitime interesse i at besvare henvendelser og, hvis du ønsker et tilbud, at tage skridt til en aftale (databeskyttelsesforordningens art. 6, stk. 1, litra f og b).</li>
+        <li><strong>Project Vega:</strong> Grundlaget er dit samtykke (art. 6, stk. 1, litra a). Du kan altid trække det tilbage ved at skrive til os, så sletter vi din henvendelse.</li>
+      </ul>
+      <p>Vi beder dig om ikke at skrive oplysninger om helbred eller handicap. Hvis du alligevel gør det, sletter vi dem, når vi har læst henvendelsen, medmindre du udtrykkeligt har bedt os om at bruge dem.</p>
+
+      <h2>Hvor længe gemmer vi dem</h2>
+      <p>Henvendelser slettes automatisk 12 måneder efter, at vi har modtaget dem. Fører en henvendelse til en aftale, gemmer vi de oplysninger, som bogføringsloven kræver.</p>
+      <p>For at stoppe spam gemmer vi en envejskode (et hash) af din IP-adresse i et døgn. Selve IP-adressen gemmer vi ikke.</p>
+
+      <h2>Hvem behandler oplysningerne for os</h2>
+      <p>Siden og formularerne kører hos Cloudflare, der gemmer henvendelserne og sender os en besked på e-mail. Cloudflare er certificeret under EU-US Data Privacy Framework. Vi deler ikke dine oplysninger med andre.</p>
+
+      <h2>Dine rettigheder</h2>
+      <p>Du har ret til at få indsigt i, rette og slette de oplysninger, vi har om dig, og til at gøre indsigelse mod behandlingen. Skriv til os, så hjælper vi. Du kan også klage til <a href="https://www.datatilsynet.dk">Datatilsynet</a>.</p>
+    </Prose>
+  </Section>
+</BaseLayout>

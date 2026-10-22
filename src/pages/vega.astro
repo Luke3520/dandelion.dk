@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Steps from '../components/Steps.astro';
+import PeopleList from '../components/PeopleList.astro';
+import RequestForm from '../components/RequestForm.astro';
+import IntakeIntro from '../components/IntakeIntro.astro';
+import CrackFlower from '../components/art/CrackFlower.astro';
+import { getPeople } from '../lib/collections';
+
+const collaborators = await getPeople('collaborators');
+
+const know = ['Hvem du er', 'Hvilken organisation du er en del af', 'Hvordan vi bedst når dig', 'Hvad problemet er'];
+
+const offer = [
+  { title: 'Software og hjemmesider', text: 'Tilgængelige hjemmesider, små værktøjer og hjælp til de systemer, I allerede bruger.' },
+  { title: 'Undervisning og materialer', text: 'Klart sprog, let-læste tekster og undervisning i digitale værktøjer, ved vores lingvist.' },
+  { title: 'Rådgivning', text: 'En second opinion på tekniske valg, leverandører og tilbud, I har fået.' },
+];
+
+const steps = [
+  { title: 'I skriver til os', text: 'Organisationer og de mennesker, der er en del af dem, kan skrive til os om, hvad de har brug for.' },
+  { title: 'Vi samler forespørgslerne', text: 'Alle henvendelser kommer på en fælles liste, så vi kan se, hvad der fylder mest.' },
+  { title: 'Vi ser efter mønstre', text: 'Når mange spørger om det samme, eller en organisation står bag en forespørgsel, tager vi den op.' },
+  { title: 'Vi hjælper', text: 'Gratis eller til kostpris, alt efter opgavens størrelse. Det aftaler vi altid, før vi går i gang.' },
+];
+---
+<BaseLayout
+  title="Project Vega"
+  description="Project Vega er Dandelions projekt, hvor vi giver tid til organisationer, der arbejder med og for mennesker med handicap. Software, hjemmesider og undervisning, gratis eller til kostpris."
+  routeKey="vega"
+>
+  <Hero
+    title="Project Vega"
+    lede="Vi giver tid til organisationer, der arbejder med og for mennesker med handicap, og til de mennesker, der er en del af dem. Med software, hjemmesider og undervisning, gratis eller til kostpris."
+    ground="var(--mist)"
+  >
+    <a class="button" href="#skriv">Skriv til Project Vega</a>
+  </Hero>
+
+  <Section tone="mist">
+    <IntakeIntro title="Vi vil gerne vide" items={know} />
+  </Section>
+
+  <Section>
+    <div class="promise">
+      <div>
+        <h2>Vores løfte til dig</h2>
+        <p>Kan vi hjælpe, gør vi det. Er I i nærheden af København, kommer vi gerne forbi og tegner tingene op sammen med jer. Ellers tager vi et videomøde.</p>
+        <p>Kan vi ikke selv hjælpe, kender vi som regel nogen, vi kan sende jer videre til.</p>
+        <p class="free display">Den første time koster aldrig noget.</p>
+        <p><a class="button dark" href="#skriv">Skriv til os</a></p>
+      </div>
+      <CrackFlower label="Tegning af en gul mælkebøtte, der vokser op gennem en revne i asfalten i morgenlys." />
+    </div>
+  </Section>
+
+  <Section title="Det kan vi hjælpe med" tone="mist" intro="Mange foreninger og organisationer har brug for digitale løsninger, men har hverken budget eller folk til det. Tilgængelighed og klart sprog er noget, vi arbejder med hver dag, og Project Vega er vores måde at bruge det til noget, der betyder noget.">
+    <CardGrid items={offer} columns={3} variant="cards" />
+  </Section>
+
+  <Section title="Sådan fungerer det">
+    <Steps items={steps} />
+  </Section>
+
+  <Section title="Ikke sikker på, hvor du skal starte?" id="skriv" tone="mist" intro="Udfyld formularen, så tager vi en snak.">
+    <div class="form-card">
+      <RequestForm kind="vega" />
+    </div>
+  </Section>
+
+  <Section title="Collaborators" intro="Project Vega bliver båret af et netværk af mennesker, der giver af deres tid og viden.">
+    {collaborators.length > 0 && <PeopleList people={collaborators} />}
+    <p class="join">Vil du være med? <a href="/kontakt/">Skriv til os</a>.</p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .promise { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem 5rem; align-items: center; }
+  .promise p:not(.free) { font-size: var(--lede); max-width: var(--measure); }
+  .free { font-size: var(--display-l); line-height: 1.2; margin: 1.5rem 0 2rem; }
+  .form-card { background: var(--paper); border-radius: var(--radius); padding: clamp(1.5rem, 4vw, 3rem); max-width: 48rem; }
+  .join { margin-top: 1.5rem; }
+  @media (max-width: 760px) { .promise { grid-template-columns: 1fr; } }
+</style>

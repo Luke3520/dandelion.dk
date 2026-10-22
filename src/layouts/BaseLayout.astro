@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { routes, type Locale, type RouteKey } from '../i18n/routes';
+import { ui } from '../i18n/ui';
+import { site } from '../site';
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+  // Pages that exist in both languages pass their route key, so hreflang and the switcher point at the twin.
+  routeKey?: RouteKey;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, locale = 'da', routeKey, noindex = false, jsonLd } = Astro.props;
+const t = ui[locale];
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const pair = routeKey ? routes[routeKey] : undefined;
+const otherLocale: Locale = locale === 'da' ? 'en' : 'da';
+const switchHref = pair ? pair[otherLocale] : routes.home[otherLocale];
+const fullTitle = Astro.url.pathname === '/' || Astro.url.pathname === '/en/' ? title : `${title} | ${site.name}`;
+const favicon =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%23F6C21B'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%231F2B1A'/%3E%3C/svg%3E";
+---
+<!doctype html>
+<html lang={locale}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{fullTitle}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  {noindex && <meta name="robots" content="noindex">}
+  {pair && (
+    <>
+      <link rel="alternate" hreflang="da" href={new URL(pair.da, site.url).href}>
+      <link rel="alternate" hreflang="en" href={new URL(pair.en, site.url).href}>
+      <link rel="alternate" hreflang="x-default" href={new URL(pair.da, site.url).href}>
+    </>
+  )}
+  <link rel="icon" href={favicon}>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content={site.name}>
+  <meta property="og:title" content={fullTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:locale" content={locale === 'da' ? 'da_DK' : 'en_GB'}>
+  <meta name="twitter:card" content="summary">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+</head>
+<body>
+  <a class="skip" href="#indhold">{t.skip}</a>
+  <SiteHeader locale={locale} switchHref={switchHref} />
+  <main id="indhold">
+    <slot />
+  </main>
+  <SiteFooter locale={locale} />
+</body>
+</html>

@@ -1,0 +1,44 @@
+---
+// The big serif list of services on a yellow field, with a seed head in a blob beside it.
+import Arrow from './Arrow.astro';
+import SketchMarks from './art/SketchMarks.astro';
+import { plant } from '../lib/plants';
+
+interface Props { label: string; items: { label: string; href: string }[] }
+const { label, items } = Astro.props;
+const clock = plant(100, 270, { height: 185, lean: -6, head: 'clock', seed: 12 });
+---
+<section class="services">
+  <div class="wrap inner">
+    <div>
+      <h2 class="label">{label}</h2>
+      <ul>
+        {items.map((item) => (
+          <li><a href={item.href}>{item.label}<Arrow /></a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="blob" aria-hidden="true">
+      <svg viewBox="0 0 200 290" focusable="false"><SketchMarks marks={clock.rosette} /><SketchMarks marks={clock.top} /></svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services { background: var(--yellow); padding: var(--section) 0; overflow: hidden; }
+  .inner { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 3rem; align-items: center; }
+  .label { font-size: 1.5rem; margin-bottom: 1.5rem; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li + li { margin-top: 0.35rem; }
+  a { font-family: var(--font-display); font-weight: var(--display-weight); font-variation-settings: var(--display-soft); font-size: clamp(1.9rem, 4.4vw, 3.2rem); line-height: 1.25; text-decoration: none; display: inline-flex; align-items: center; gap: 1rem; }
+  a :global(.arrow) { width: 2.2rem; height: auto; opacity: 0; transform: translateX(-8px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  a:hover, a:focus-visible { text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.15em; text-decoration-color: var(--ink); }
+  a:hover :global(.arrow), a:focus-visible :global(.arrow) { opacity: 1; transform: none; }
+  .services :focus-visible { outline-color: var(--ink); }
+  .blob { --ink: #0f160c; --seed: var(--night-text); background: var(--night); color: var(--night-text); border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%; aspect-ratio: 1; display: grid; place-items: center; margin-right: -12vw; }
+  .blob svg { width: 62%; height: auto; overflow: visible; }
+  @media (max-width: 760px) {
+    .inner { grid-template-columns: 1fr; }
+    .blob { width: 70%; justify-self: end; margin-right: -3rem; order: -1; }
+  }
+</style>

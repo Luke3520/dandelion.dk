@@ -1,0 +1,39 @@
+---
+import type { PriceRow } from '../data/prices';
+
+interface Props { rows: PriceRow[]; caption: string; readMore?: string }
+const { rows, caption, readMore } = Astro.props;
+---
+<table class="prices">
+  <caption>{caption}</caption>
+  <tbody>
+    {rows.map((row) => (
+      <tr>
+        <th scope="row">
+          {row.name}
+          {row.href && readMore && <a class="more" href={row.href}>{readMore}<span class="visually-hidden">: {row.name}</span></a>}
+        </th>
+        <td class="what">{row.what}</td>
+        <td class="price">{row.price}{row.note && <span class="note">{row.note}</span>}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .prices { width: 100%; border-collapse: collapse; }
+  caption { text-align: left; color: var(--muted); font-size: var(--text-small); padding-bottom: 1rem; }
+  tr { border-top: 1px solid var(--line); }
+  tr:last-child { border-bottom: 1px solid var(--line); }
+  th, td { text-align: left; vertical-align: top; padding: 1.5rem 1.5rem 1.5rem 0; }
+  th { width: 22%; font-weight: 700; }
+  .what { color: var(--muted); }
+  .price { width: 24%; font-family: var(--font-display); font-variation-settings: var(--display-soft); font-weight: 450; font-size: 1.35rem; padding-right: 0; }
+  .price .note { font-family: var(--font); }
+  .note { display: block; font-weight: 400; font-size: var(--text-small); color: var(--muted); margin-top: 0.25rem; }
+  .more { display: block; font-weight: 400; font-size: var(--text-small); margin-top: 0.25rem; }
+  @media (max-width: 760px) {
+    tr { display: block; padding: 1.25rem 0; }
+    th, td, .price { display: block; width: auto; padding: 0 0 0.5rem; }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+// A grid of short items: problem cards, service pillars, values, trust points.
+// `cards`: rounded mist cards. `icons`: centred items with a line icon above. `dots`: plain list with yellow dots.
+import Arrow from './Arrow.astro';
+import Icon, { type IconName } from './Icon.astro';
+import ServiceArt, { type ServiceArtName } from './art/ServiceArt.astro';
+
+export interface Card { title: string; text: string; href?: string; linkLabel?: string; icon?: IconName; art?: ServiceArtName }
+interface Props { items: Card[]; columns?: 2 | 3 | 4; variant?: 'dots' | 'cards' | 'icons'; quote?: boolean }
+const { items, columns = 2, variant = 'dots', quote = false } = Astro.props;
+---
+<ul class:list={['grid', variant, `cols-${columns}`, { quote }]}>
+  {items.map((item) => (
+    <li>
+      {variant === 'icons' && item.icon && <Icon name={item.icon} />}
+      {item.art && <div class="art"><ServiceArt name={item.art} /></div>}
+      <h3>{item.title}</h3>
+      <p>{item.text}</p>
+      {item.href && <p class="more"><a class="arrow-link" href={item.href}>{item.linkLabel ?? item.title}<Arrow /></a></p>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.5rem 3rem; }
+  .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem 2rem; }
+  li { max-width: var(--measure); }
+  p { margin: 0; }
+  .more { margin-top: 1rem; }
+  .more a { text-decoration: none; }
+  .more a:hover { text-decoration: underline; text-decoration-color: var(--yellow); }
+
+  .dots p, .cards p:not(.more) { color: var(--muted); }
+  .dots h3 { display: flex; gap: 0.6rem; align-items: baseline; }
+  .dots h3::before { content: ""; flex: none; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--yellow); transform: translateY(-0.1rem); }
+
+  .cards { gap: 1.5rem; }
+  .cards li { background: var(--mist); border-radius: var(--radius); padding: 2rem; max-width: none; display: flex; flex-direction: column; }
+  .cards .more { margin-top: auto; padding-top: 1.5rem; }
+  .art { max-width: 17rem; margin: 0 auto 1.75rem; width: 100%; }
+  :global(.mist) .cards li { background: var(--paper); }
+  .quote h3 { font-family: var(--font-display); font-weight: var(--display-weight); font-variation-settings: var(--display-soft); font-size: 1.6rem; line-height: 1.2; margin-bottom: 1rem; }
+
+  .icons li { text-align: center; margin-inline: auto; max-width: 17rem; }
+  .icons :global(.icon) { margin-bottom: 1.25rem; }
+  .icons h3 { margin-bottom: 0.4rem; }
+
+  @media (max-width: 900px) { .cols-3, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .icons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 1rem; } }
+  @media (max-width: 380px) { .icons { grid-template-columns: 1fr; } }
+</style>

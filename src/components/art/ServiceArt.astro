@@ -1,0 +1,182 @@
+---
+// Spot illustrations for the three services, drawn by hand-feel in the brand palette.
+// Decorative: the card text next to them carries the meaning.
+import { sketchbook, seedMarks as seed, type Mark } from '../../lib/sketch';
+import SketchMarks from './SketchMarks.astro';
+
+export type ServiceArtName = 'web' | 'systems' | 'advice';
+interface Props { name: ServiceArtName }
+const { name } = Astro.props;
+
+const P = 'var(--paper)';
+const Y = 'var(--yellow)';
+const M = 'var(--mist)';
+const G = 'var(--leaf)';
+const C = 'var(--clay)';
+// Small shapes get one calm stroke; rough double strokes turn them into scribbles.
+const small = { roughness: 0.45, disableMultiStroke: true, strokeWidth: 1.6 };
+
+// Static drawing, plus named groups that move.
+let base: Mark[] = [];
+const moving: Record<string, Mark[]> = {};
+
+if (name === 'web') {
+  const b = sketchbook(11);
+  // Browser window.
+  b.round(34, 26, 226, 156, 12, P);
+  b.line(36, 50, 258, 50);
+  b.circle(50, 38, 7, Y, small);
+  b.circle(62, 38, 7, undefined, small);
+  b.circle(74, 38, 7, undefined, small);
+  b.round(92, 33, 120, 11, 5, M, { strokeWidth: 1.4 });
+  // Page: a dandelion hero, headline lines and a button.
+  b.patch('M58 64 Q90 52 116 66 Q122 100 112 128 Q84 134 60 124 Q52 96 58 64 Z', Y);
+  b.line(87, 142, 88, 98, { strokeWidth: 2.2, stroke: 'var(--stem)', roughness: 0.6 });
+  for (let i = 0; i < 18; i++) {
+    const a = (i / 18) * Math.PI * 2;
+    b.line(88 + Math.cos(a) * 4, 90 + Math.sin(a) * 4, 88 + Math.cos(a) * 19, 90 + Math.sin(a) * 19, { strokeWidth: 1, roughness: 0.3, disableMultiStroke: true });
+    b.circle(88 + Math.cos(a) * 20, 90 + Math.sin(a) * 20, 3, undefined, { strokeWidth: 0.9, roughness: 0.2, disableMultiStroke: true });
+  }
+  b.circle(88, 90, 8, G, small);
+  b.line(126, 74, 214, 72, { strokeWidth: 3 });
+  b.line(126, 86, 196, 85, { strokeWidth: 3 });
+  b.line(126, 102, 222, 101, { strokeWidth: 1.4 });
+  b.line(126, 111, 206, 110, { strokeWidth: 1.4 });
+  b.round(126, 122, 52, 17, 8, Y, { strokeWidth: 1.8 });
+  b.rect(52, 152, 48, 20, M, { strokeWidth: 1.4 });
+  b.rect(110, 152, 48, 20, M, { strokeWidth: 1.4 });
+  b.rect(168, 152, 48, 20, M, { strokeWidth: 1.4 });
+  base = b.marks;
+
+  // Magnifying glass: search, with a rising line inside it.
+  const g = sketchbook(31);
+  g.line(268, 178, 296, 206, { strokeWidth: 7, roughness: 0.6 });
+  g.circle(248, 156, 60, P, { strokeWidth: 3 });
+  g.curve([[226, 170], [238, 162], [246, 166], [258, 150], [270, 142]], { strokeWidth: 2.2, stroke: 'var(--stem)' });
+  g.circle(270, 142, 7, G, small);
+  moving.glass = g.marks;
+
+  moving.seed1 = seed(176, -6, 1.15, 51);
+  moving.seed2 = seed(250, 2, 1.3, 61);
+  moving.seed3 = seed(292, 40, 0.95, 71);
+}
+
+if (name === 'systems') {
+  const b = sketchbook(12);
+  // Card terminal with a receipt.
+  b.path('M58 70 C58 58 62 52 66 48 L92 48 C96 52 100 58 100 70 Z', P, { strokeWidth: 1.6 });
+  b.line(66, 56, 90, 56, { strokeWidth: 1.2 });
+  b.line(66, 62, 84, 62, { strokeWidth: 1.2 });
+  b.round(38, 66, 84, 118, 14, P);
+  b.round(50, 78, 60, 34, 6, M, { strokeWidth: 1.8 });
+  b.line(58, 92, 78, 92, { strokeWidth: 2.4 });
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      b.circle(58 + c * 22, 128 + r * 16, 10, r === 2 && c === 2 ? Y : undefined, small);
+    }
+  }
+  // Laptop with a webshop.
+  b.round(188, 58, 112, 78, 6, P);
+  b.poly([[178, 136], [310, 136], [318, 150], [170, 150]], M);
+  b.line(196, 70, 292, 70, { strokeWidth: 1.4 });
+  b.rect(198, 80, 26, 26, Y, { strokeWidth: 1.6 });
+  b.rect(232, 80, 26, 26, M, { strokeWidth: 1.6 });
+  b.rect(266, 80, 26, 26, M, { strokeWidth: 1.6 });
+  b.line(198, 114, 220, 114, { strokeWidth: 1.4 });
+  b.line(232, 114, 252, 114, { strokeWidth: 1.4 });
+  b.line(266, 114, 286, 114, { strokeWidth: 1.4 });
+  b.round(198, 122, 30, 8, 4, Y, { strokeWidth: 1.2 });
+  // Stock box between them.
+  b.poly([[136, 160], [164, 160], [164, 188], [136, 188]], Y);
+  b.poly([[136, 160], [146, 150], [174, 150], [164, 160]], P, { strokeWidth: 1.8 });
+  b.poly([[164, 160], [174, 150], [174, 178], [164, 188]], C, { strokeWidth: 1.8 });
+  b.line(150, 160, 150, 172, { strokeWidth: 1.4 });
+  // The two directions of sync, drawn as arcs between terminal and shop.
+  b.curve([[124, 92], [150, 70], [184, 84]], { strokeWidth: 2 });
+  b.line(176, 78, 186, 85, { strokeWidth: 2 });
+  b.line(178, 92, 186, 85, { strokeWidth: 2 });
+  b.curve([[184, 116], [156, 136], [126, 120]], { strokeWidth: 2 });
+  b.line(132, 112, 124, 120, { strokeWidth: 2 });
+  b.line(134, 126, 124, 120, { strokeWidth: 2 });
+  base = b.marks;
+}
+
+if (name === 'advice') {
+  const b = sketchbook(13);
+  // A sheet with a decision sketched on it.
+  b.poly([[60, 50], [218, 40], [230, 196], [72, 206]], P);
+  b.round(88, 70, 46, 24, 5, M, { strokeWidth: 1.6 });
+  b.round(158, 62, 46, 24, 5, M, { strokeWidth: 1.6 });
+  b.round(124, 140, 50, 26, 5, Y, { strokeWidth: 1.8 });
+  b.line(112, 96, 140, 138, { strokeWidth: 1.6 });
+  b.line(180, 88, 156, 138, { strokeWidth: 1.6 });
+  b.ellipse(149, 153, 74, 46, undefined, { strokeWidth: 1.4, stroke: 'var(--clay)' });
+  b.line(96, 112, 120, 111, { strokeWidth: 1.2 });
+  b.line(178, 104, 206, 102, { strokeWidth: 1.2 });
+  // Pencil.
+  b.poly([[196, 196], [262, 140], [272, 152], [206, 206]], Y, { strokeWidth: 1.8 });
+  b.poly([[196, 196], [206, 206], [188, 214]], P, { strokeWidth: 1.6 });
+  b.line(256, 146, 266, 158, { strokeWidth: 1.6 });
+  // Coffee cup.
+  b.path('M246 70 L250 110 C252 118 276 118 278 110 L282 70 Z', P);
+  b.path('M282 78 C296 78 296 98 280 98', undefined, { strokeWidth: 2 });
+  b.ellipse(264, 70, 36, 10, 'var(--clay)', { strokeWidth: 1.6 });
+  // Speech bubbles: a question, and a tick.
+  b.path('M22 30 H70 Q78 30 78 38 V58 Q78 66 70 66 H44 L32 78 L34 66 H22 Q14 66 14 58 V38 Q14 30 22 30 Z', Y);
+  b.path('M42 40 C42 33 54 33 54 40 C54 46 46 46 46 52', undefined, { strokeWidth: 2.4 });
+  b.circle(46, 58, 3.5, 'var(--ink)', small);
+  b.path('M92 14 H136 Q144 14 144 22 V40 Q144 48 136 48 H118 L124 58 L108 48 H92 Q84 48 84 40 V22 Q84 14 92 14 Z', M);
+  b.path('M104 31 L111 38 L126 23', undefined, { strokeWidth: 3, stroke: 'var(--stem)' });
+  base = b.marks;
+
+  const s = sketchbook(41);
+  s.curve([[256, 60], [252, 50], [258, 42], [254, 32]], { strokeWidth: 1.6, roughness: 0.5 });
+  s.curve([[268, 60], [264, 48], [270, 40], [266, 28]], { strokeWidth: 1.6, roughness: 0.5 });
+  moving.steam = s.marks;
+}
+---
+<svg class:list={['service-art', name]} viewBox="0 0 320 220" aria-hidden="true" focusable="false">
+  <SketchMarks marks={base} />
+  {Object.entries(moving).map(([group, marks]) => (
+    <g class={group}><SketchMarks marks={marks} /></g>
+  ))}
+  {name === 'systems' && (
+    <g class="packets">
+      <circle class="packet to-shop" r="4.5" />
+      <circle class="packet to-shop late" r="4.5" />
+      <circle class="packet to-till" r="4.5" />
+    </g>
+  )}
+</svg>
+
+<style>
+  .service-art { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .web :global(.glass) { animation: bob 6s ease-in-out infinite; }
+  .web :global(.seed1) { animation: float 9s ease-in-out infinite; }
+  .web :global(.seed2) { animation: float 11s ease-in-out -3s infinite; }
+  .web :global(.seed3) { animation: float 13s ease-in-out -6s infinite; }
+  @keyframes bob { 50% { transform: translate(-3px, -4px) rotate(-1.5deg); } }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(8px, -10px) rotate(8deg); }
+  }
+
+  .packet { fill: var(--yellow); stroke: var(--ink); stroke-width: 1.5; }
+  .to-shop { offset-path: path('M124 92 Q150 70 184 84'); animation: travel 3.2s ease-in-out infinite; }
+  .to-shop.late { animation-delay: -1.6s; }
+  .to-till { fill: var(--leaf); offset-path: path('M184 116 Q156 136 126 120'); animation: travel 3.6s ease-in-out -0.8s infinite; }
+  @keyframes travel {
+    0% { offset-distance: 0%; opacity: 0; }
+    15%, 85% { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0; }
+  }
+
+  .advice :global(.steam) { animation: steam 4s ease-in-out infinite; }
+  @keyframes steam {
+    0%, 100% { transform: translateY(0); opacity: 0.9; }
+    50% { transform: translateY(-5px); opacity: 0.4; }
+  }
+
+  .service-art :global(g) { transform-box: fill-box; transform-origin: center; }
+</style>

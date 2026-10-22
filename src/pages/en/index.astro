@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import CaseList from '../../components/CaseList.astro';
+import LogoMarquee from '../../components/LogoMarquee.astro';
+import ServiceList from '../../components/ServiceList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Arrow from '../../components/Arrow.astro';
+import CrackFlower from '../../components/art/CrackFlower.astro';
+import { getCases } from '../../lib/collections';
+import { organisation } from '../../lib/jsonld';
+import { trust } from '../../data/trust';
+import { prices, kr } from '../../data/prices';
+
+const cases = await getCases();
+
+const problems = [
+  { title: '“We need a website people can find and use.”', text: 'Websites with clear structure, local SEO and accessibility, so customers find you and can use the site.', href: '/en/services/#websites', linkLabel: 'Websites and SEO', art: 'web' as const },
+  { title: '“Our till and our webshop don’t talk.”', text: 'Integrations between till, webshop, stock and accounting, and tools that replace paper and spreadsheets.', href: '/en/services/#systems', linkLabel: 'Systems and integrations', art: 'systems' as const },
+  { title: '“We have to choose, and we don’t want to guess.”', text: 'Help with technical decisions: payments, till systems, vendors, or a second opinion for your own developers.', href: '/en/services/#advice', linkLabel: 'Advice', art: 'advice' as const },
+];
+const services = [
+  { label: 'Websites and SEO', href: '/en/services/#websites' },
+  { label: 'Systems and integrations', href: '/en/services/#systems' },
+  { label: 'Tills and webshops', href: '/en/services/#systems' },
+  { label: 'Systems check and advice', href: '/en/services/#advice' },
+  { label: 'Advice for developers', href: '/en/services/#advice' },
+  { label: 'Prices', href: '/en/services/#prices' },
+];
+---
+<BaseLayout
+  title="Dandelion | Websites, systems and advice for small companies"
+  description="Dandelion is a small digital studio in Copenhagen. We build websites, tools and integrations and help small companies with technical decisions."
+  locale="en"
+  routeKey="home"
+  jsonLd={organisation}
+>
+  <Hero
+    title="Small systems that keep the day running."
+    lede="Dandelion is a small digital studio in Copenhagen. We build websites, tools and integrations, and help with the technical decisions, for companies that are too small for an IT firm but too big for paper and spreadsheets."
+    artLabel="Drawing of dandelions on a hill at night. Seeds drift from a dandelion clock across the sky."
+  >
+    <a class="button" href="/en/contact/">Book a systems check</a>
+    <a href="#work">See what we have built</a>
+  </Hero>
+
+  <Section title="Selected work" id="work" tone="night">
+    <LogoMarquee cases={cases} label="Clients we have worked for" />
+    <CaseList cases={cases} locale="en" layout="row" label="Selected work" />
+  </Section>
+
+  <Section title="What’s getting in the way?">
+    <CardGrid items={problems} columns={3} variant="cards" quote />
+  </Section>
+
+  <Section title={trust.en.title} intro={trust.en.intro} tone="mist" center>
+    <CardGrid items={trust.en.items} columns={4} variant="icons" />
+  </Section>
+
+  <ServiceList label="What we help with" items={services} />
+
+  <Section>
+    <div class="statement">
+      <div>
+        <h2>Your digital main contractor</h2>
+        <p class="big display">One agreement, one point of contact, and specialists when the job needs them.</p>
+      </div>
+      <div>
+        <p>Like a main contractor in construction, we take on the whole job, from advice and design to the finished result and running it afterwards. When a specialist is needed, we bring one in from our network, and you always know who does what.</p>
+        <p><a class="arrow-link" href="/en/about/">Meet us<Arrow /></a></p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="mist">
+    <div class="vega">
+      <div>
+        <h2>Project Vega</h2>
+        <p class="big display">Technology should serve the people it is for.</p>
+        <p>We give our time to organisations working with and for people with disabilities, and to the people who are part of them. With software, websites and teaching, for free or at cost.</p>
+        <p class="actions"><a class="button dark" href="/en/vega/">About Project Vega</a></p>
+      </div>
+      <CrackFlower label="Drawing of a yellow dandelion growing up through a crack in the asphalt in morning light." />
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Start with a systems check"
+    text="Two hours with us on your systems or a technical decision, followed by a written recommendation. The price is deducted if you go ahead with us."
+    price={`${kr(prices.systemtjek, 'en')} excl. VAT`}
+    href="/en/contact/"
+    label="Book a systems check"
+  />
+</BaseLayout>
+
+<style>
+  .statement, .vega { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem 5rem; align-items: center; }
+  .statement { align-items: end; }
+  .big { font-size: var(--display-l); line-height: 1.2; margin: 0 0 1.5rem; }
+  .statement h2, .vega h2 { font-family: var(--font); font-weight: 700; font-size: var(--text-small); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.25rem; }
+  .statement p:not(.big) { font-size: var(--lede); }
+  @media (max-width: 760px) {
+    .statement, .vega { grid-template-columns: 1fr; }
+  }
+</style>

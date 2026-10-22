@@ -1,0 +1,41 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ServiceArt from '../../components/art/ServiceArt.astro';
+import Section from '../../components/Section.astro';
+import Prose from '../../components/Prose.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCases } from '../../lib/collections';
+
+export async function getStaticPaths() {
+  return (await getCases()).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+---
+<BaseLayout title={data.title} description={data.summary}>
+  <Hero title={data.title} lede={data.summary}>
+    <ServiceArt slot="art" name={({ hjemmesider: 'web', systemer: 'systems', raadgivning: 'advice' } as const)[data.pillar]} />
+    <p slot="before" class="back"><a href="/arbejde/">Alle opgaver</a></p>
+    <dl slot="after" class="facts">
+      {data.named && data.client && (<><dt>Kunde</dt><dd>{data.client}</dd></>)}
+      <dt>Status</dt><dd>{data.status === 'live' ? 'I brug' : 'I gang'}</dd>
+      {data.stack.length > 0 && (<><dt>Teknik</dt><dd>{data.stack.join(', ')}</dd></>)}
+      {data.link && (<><dt>Link</dt><dd><a href={data.link}>{new URL(data.link).hostname}</a></dd></>)}
+    </dl>
+  </Hero>
+  <Section>
+    <Prose><Content /></Prose>
+  </Section>
+  <CtaBand title="Har I en lignende opgave?" text="Fortæl os kort, hvad der driller, så vender vi tilbage." href="/kontakt/" label="Skriv til os" />
+</BaseLayout>
+
+<style>
+  .back { font-size: var(--text-small); }
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1.5rem; margin: 2rem 0 0; color: var(--night-muted); }
+  dt { font-weight: 700; color: #FFFFFF; }
+  dd { margin: 0; }
+</style>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { trust } from '../../data/trust';
+import { prices, kr } from '../../data/prices';
+
+const pillars = [
+  {
+    title: 'Hjemmesider og SEO',
+    text: 'Nye hjemmesider og redesign med god struktur, lokal SEO og tilgængelighed efter WCAG 2.1 AA. Med klart sprog som tilkøb.',
+    href: '/ydelser/hjemmesider/',
+    linkLabel: 'Læs om hjemmesider',
+    art: 'web' as const,
+  },
+  {
+    title: 'Systemer og integrationer',
+    text: 'Værktøjer, der erstatter papir og regneark, og forbindelser mellem kasse, webshop, lager og bogføring.',
+    href: '/ydelser/systemer/',
+    linkLabel: 'Læs om systemer',
+    art: 'systems' as const,
+  },
+  {
+    title: 'Rådgivning',
+    text: 'Systemtjek, hjælp til tekniske valg som betaling og kassesystem, og sparring til virksomheder med egne udviklere.',
+    href: '/ydelser/raadgivning/',
+    linkLabel: 'Læs om rådgivning',
+    art: 'advice' as const,
+  },
+];
+---
+<BaseLayout
+  title="Ydelser"
+  description="Hjemmesider og SEO, systemer og integrationer, og rådgivning om tekniske beslutninger for små virksomheder."
+  routeKey="services"
+>
+  <Hero
+    title="Det kan vi hjælpe med"
+    lede="Vi arbejder inden for tre områder. Mange opgaver rører dem alle, fx en ny webshop, der skal tale med kassen i butikken."
+  />
+  <Section title="Tre områder">
+    <CardGrid items={pillars} columns={3} variant="cards" />
+  </Section>
+  <Section title={trust.da.title} intro={trust.da.intro} tone="mist" center>
+    <CardGrid items={trust.da.items} columns={4} variant="icons" />
+  </Section>
+  <CtaBand
+    title="Usikker på, hvor I skal starte?"
+    text="Et Systemtjek giver jer et overblik og en skriftlig anbefaling, før I bruger penge på det forkerte."
+    price={`${kr(prices.systemtjek, 'da')} ekskl. moms`}
+    href="/kontakt/"
+    label="Book et Systemtjek"
+  />
+</BaseLayout>

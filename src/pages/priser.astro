@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SpotArt from '../components/art/SpotArt.astro';
+import Section from '../components/Section.astro';
+import PricingTable from '../components/PricingTable.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { priceRows, prices, kr } from '../data/prices';
+
+const faq = [
+  { q: 'Er priserne med moms?', a: 'Nej. Alle priser er ekskl. moms.' },
+  { q: 'Hvad betyder “fra”?', a: 'Det er prisen for den enkleste udgave. I får altid en fast pris, før vi går i gang, så I ved, hvad det koster.' },
+  { q: 'Hvad sker der efter et Systemtjek?', a: `I får en skriftlig anbefaling. Vælger I at gå videre med os, trækker vi de ${kr(prices.systemtjek, 'da')} fra prisen på opgaven. Vælger I en anden, er anbefalingen stadig jeres.` },
+  { q: 'Hvorfor står der ingen pris på systemer og integrationer?', a: 'Fordi prisen afhænger helt af, hvilke systemer I har, og hvad de kan. Efter et Systemtjek får I en fast pris.' },
+  { q: 'Vi har allerede en udvikler. Kan I stadig hjælpe?', a: `Ja. Klippekortet med ${prices.sparringHours} timers sparring er lavet til netop det: en second opinion, arkitektur eller valg af leverandør.` },
+  { q: 'Hvad med foreninger og organisationer?', a: 'Organisationer, der arbejder med og for mennesker med handicap, kan få hjælp gratis eller til kostpris gennem Project Vega.' },
+];
+---
+<BaseLayout
+  title="Priser"
+  description="Faste priser på Systemtjek, hjemmesider, drift og sparring. Alle priser ekskl. moms."
+>
+  <Hero
+    title="Priser"
+    lede="Vi viser vores priser, fordi I skal kunne vurdere, om vi passer til jer, før I skriver. Alle priser er ekskl. moms."
+  >
+    <SpotArt slot="art" name="prices" />
+  </Hero>
+  <Section>
+    <PricingTable rows={priceRows('da')} caption="Priser ekskl. moms" readMore="Læs mere" />
+  </Section>
+  <Section title="Spørgsmål om priser" tone="soft">
+    <Faq items={faq} />
+  </Section>
+  <CtaBand
+    title="Start med et Systemtjek"
+    text="Det er den billigste måde at finde ud af, hvad I har brug for."
+    price={`${kr(prices.systemtjek, 'da')} ekskl. moms`}
+    href="/kontakt/"
+    label="Book et Systemtjek"
+  />
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { trust } from '../../data/trust';
+import { priceRows, prices, kr } from '../../data/prices';
+
+const websites = [
+  { title: 'New sites and redesigns', text: 'From a simple site with a contact form to a larger business site with news, cases or booking.' },
+  { title: 'SEO you can measure', text: 'Technical SEO, fast pages, a structure Google understands, and local visibility through your Google Business Profile.' },
+  { title: 'Accessibility', text: 'WCAG 2.1 AA and screen reader testing. It helps every visitor, and many webshops fall under the EU accessibility rules.' },
+  { title: 'Plain language', text: 'Copy that is easy to read and understand, written with our linguist, including an easy-read version if you need one.' },
+];
+const systems = [
+  { title: 'Tools for your workflow', text: 'When a paper form or a spreadsheet has become too small, we build a system that fits the way you actually work.' },
+  { title: 'Till, webshop and stock', text: 'We connect your systems through their APIs, so orders, products and stock are never typed in twice.' },
+  { title: 'Booking and rental', text: 'Systems for rental, booking and reservations, such as bike rental at a hotel.' },
+  { title: 'Running it after launch', text: 'We set up hosting and automated deployment and keep an eye on the system once it is in use.' },
+];
+const advice = [
+  { title: 'Systems check', text: `Two hours together, then a written recommendation. ${kr(prices.systemtjek, 'en')} excl. VAT, deducted from the project if you go ahead with us.` },
+  { title: 'A second opinion for your developers', text: `A block of ${prices.sparringHours} hours for architecture, choosing a vendor, code review or a second opinion. ${kr(prices.sparringBlock, 'en')} excl. VAT.` },
+  { title: 'Microsoft 365 and email security', text: 'A check of two-factor login, admin roles, old accounts, sharing and your domain’s email protection (SPF, DKIM and DMARC).' },
+  { title: 'Security questionnaires', text: 'A customer sent you a security questionnaire? We help you understand it, answer honestly and close the most important gaps.' },
+];
+---
+<BaseLayout
+  title="Services"
+  description="Websites and SEO, systems and integrations, and advice on technical decisions for small companies in Denmark."
+  locale="en"
+  routeKey="services"
+>
+  <Hero title="What we help with" lede="We work in three areas. Many projects touch all of them, like a new webshop that has to talk to the till in the shop." />
+  <Section title="Websites and SEO" id="websites"><CardGrid items={websites} /></Section>
+  <Section title="Systems and integrations" id="systems" tone="soft"><CardGrid items={systems} /></Section>
+  <Section title="Advice" id="advice"><CardGrid items={advice} /></Section>
+  <Section title={trust.en.title} intro={trust.en.intro} tone="mist" center><CardGrid items={trust.en.items} columns={4} variant="icons" /></Section>
+  <Section title="Prices" id="prices">
+    <PricingTable rows={priceRows('en')} caption="Prices excl. VAT. Quotes are always fixed before we start." />
+  </Section>
+  <CtaBand title="Not sure where to start?" text="A systems check gives you an overview and a written recommendation before you spend money on the wrong thing." price={`${kr(prices.systemtjek, 'en')} excl. VAT`} href="/en/contact/" label="Book a systems check" />
+</BaseLayout>

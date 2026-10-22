@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ServiceArt from '../../components/art/ServiceArt.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Steps from '../../components/Steps.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { prices, kr } from '../../data/prices';
+
+const questions = [
+  { title: '“Fresto i butikken og Shopify online. Skal vi integrere, eller skifte?”', text: 'Vi ser på, hvad systemerne kan, hvad det koster, og hvad der holder om to år.' },
+  { title: '“Hvilken betalingsløsning passer til både butik og webshop?”', text: 'Gebyrer, terminaler, udbetalinger og hvad der spiller sammen med jeres kasse.' },
+  { title: '“Vores udvikler foreslår noget. Er det det rigtige?”', text: 'En uafhængig second opinion, før I binder jer.' },
+  { title: '“En kunde har sendt os et sikkerhedsspørgeskema.”', text: 'Vi hjælper jer med at forstå spørgsmålene, svare ærligt og lukke de vigtigste huller.' },
+];
+
+const systemtjek = [
+  { title: 'Inden mødet', text: 'I fortæller kort, hvad der driller, og giver os adgang til at kigge, hvis det giver mening.' },
+  { title: 'To timer sammen', text: 'Vi gennemgår jeres systemer, hjemmeside eller beslutning sammen med jer, i København eller online.' },
+  { title: 'Skriftlig anbefaling', text: 'I får en kort rapport: hvad vi fandt, hvad vi anbefaler, og hvad det cirka koster. Den er jeres, også hvis I vælger en anden til opgaven.' },
+];
+
+const more = [
+  {
+    title: `Sparring, klippekort med ${prices.sparringHours} timer`,
+    text: `Til virksomheder med egne udviklere eller et bureau: arkitektur, valg af leverandør, kodegennemgang og en second opinion. ${kr(prices.sparringBlock, 'da')} ekskl. moms.`,
+  },
+  {
+    title: 'Microsoft 365 og e-mailsikkerhed',
+    text: 'Et tjek af tofaktor-login, administratorrettigheder, gamle konti, deling og jeres domænes e-mailbeskyttelse (SPF, DKIM og DMARC). Kan lægges ind i et Systemtjek.',
+  },
+];
+---
+<BaseLayout
+  title="Rådgivning og Systemtjek"
+  description="Hjælp til tekniske beslutninger for små virksomheder: kassesystem, webshop, betaling, sikkerhed og sparring til egne udviklere. Systemtjek til fast pris."
+>
+  <Hero
+    title="Tekniske beslutninger, uden at gætte"
+    lede="Kassesystem, webshop, betaling eller en ny leverandør. Vi hjælper jer med at vælge, også når I har jeres egne udviklere."
+  >
+    <a class="button" href="/kontakt/">Book et Systemtjek</a>
+    <a href="/priser/">Se priser</a>
+    <ServiceArt slot="art" name="advice" />
+  </Hero>
+  <Section title="Spørgsmål vi tit hjælper med">
+    <CardGrid items={questions} />
+  </Section>
+  <Section title={`Systemtjek: ${kr(prices.systemtjek, 'da')} ekskl. moms`} intro="Fast pris, og beløbet trækkes fra, hvis I går videre med os." tone="soft">
+    <Steps items={systemtjek} />
+  </Section>
+  <Section title="Mere rådgivning">
+    <CardGrid items={more} />
+  </Section>
+  <CtaBand
+    title="Klar til et Systemtjek?"
+    text="Skriv kort, hvad det drejer sig om, så finder vi en tid."
+    price={`${kr(prices.systemtjek, 'da')} ekskl. moms`}
+    href="/kontakt/"
+    label="Book et Systemtjek"
+  />
+</BaseLayout>

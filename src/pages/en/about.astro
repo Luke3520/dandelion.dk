@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SpotArt from '../../components/art/SpotArt.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PeopleList from '../../components/PeopleList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getPeople } from '../../lib/collections';
+
+const team = await getPeople('team');
+const values = [
+  { title: 'Honest prices', text: 'We publish our prices and give you a fixed quote before we start.' },
+  { title: 'Accessible by default', text: 'Everything we build should work for everyone.' },
+  { title: 'Secure from day one', text: 'Building it safely from the start is cheaper than fixing it later.' },
+  { title: 'Plain language', text: 'No jargon. You should understand what you are buying.' },
+];
+---
+<BaseLayout
+  title="About"
+  description="Dandelion is a small digital studio in Copenhagen. We own the whole project and bring in specialists from our network when it needs one."
+  locale="en"
+  routeKey="about"
+>
+  <Hero title="A small studio that owns the whole project" lede="Dandelion is a small digital studio in Copenhagen for companies that are too small for an IT firm but too big for paper and spreadsheets." />
+  <Section title="How we work">
+    <div class="split">
+      <div class="measure">
+        <p>We work as a main contractor. We own the project and take responsibility for the result. When a job needs a specialist, we bring one in from our network, and you always know who does what.</p>
+        <p>Certifications belong to people, not companies, so we always say who holds which certification when it matters.</p>
+      </div>
+      <div class="art"><SpotArt name="desk" /></div>
+    </div>
+  </Section>
+  <Section title="Who we are" tone="soft"><PeopleList people={team} locale="en" withBio /></Section>
+  <Section title="What we stand for"><CardGrid items={values} columns={4} /></Section>
+  <CtaBand title="Let’s talk" text="Tell us briefly what is getting in the way, and we will get back to you." href="/en/contact/" label="Contact us" />
+</BaseLayout>
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 2rem 4rem; align-items: center; }
+  .split .art { width: 100%; }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; } .split .art { max-width: 20rem; } }
+</style>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ServiceArt from '../../components/art/ServiceArt.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import CaseList from '../../components/CaseList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCases } from '../../lib/collections';
+
+const cases = (await getCases()).filter((c) => c.data.pillar === 'systemer');
+
+const offer = [
+  { title: 'Værktøjer til jeres arbejdsgang', text: 'Når et skema på papir eller et regneark er blevet for lille, bygger vi et system, der passer til den måde, I faktisk arbejder på.' },
+  { title: 'Kasse, webshop og lager', text: 'Vi kobler systemerne sammen via deres API’er, så ordrer, varer og lager ikke skal tastes ind to gange.' },
+  { title: 'Booking og udlejning', text: 'Systemer til udlejning, booking og reservationer, fx cykeludlejning på et hotel.' },
+  { title: 'Drift efter lanceringen', text: 'Vi sætter hosting og automatisk udrulning op og holder øje med, at systemet kører, når det er taget i brug.' },
+];
+---
+<BaseLayout
+  title="Systemer og integrationer"
+  description="Skræddersyede værktøjer og integrationer mellem kassesystem, webshop, lager og bogføring for små virksomheder."
+>
+  <Hero
+    title="Systemer, der taler sammen"
+    lede="Når butikken, webshoppen og bogføringen hver lever deres eget liv, koster det tid og fejl. Vi bygger forbindelserne, eller det værktøj, der mangler."
+  >
+    <a class="button" href="/kontakt/">Fortæl os, hvad der driller</a>
+    <ServiceArt slot="art" name="systems" />
+  </Hero>
+  <Section title="Det laver vi">
+    <CardGrid items={offer} />
+  </Section>
+  {cases.length > 0 && (
+    <Section title="Eksempler" tone="soft">
+      <CaseList cases={cases} />
+    </Section>
+  )}
+  <CtaBand
+    title="Prisen afhænger af jeres systemer"
+    text="Derfor starter vi med et Systemtjek. Så ved vi begge, hvad der skal bygges, før I får en fast pris."
+    href="/ydelser/raadgivning/"
+    label="Om Systemtjek"
+  />
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ServiceArt from '../../components/art/ServiceArt.astro';
+import Section from '../../components/Section.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Steps from '../../components/Steps.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { prices, kr } from '../../data/prices';
+
+const offer = [
+  { title: 'Nye hjemmesider og redesign', text: 'Fra en enkel side med kontaktformular til en større erhvervsside med nyheder, cases eller booking.' },
+  { title: 'SEO, der kan måles', text: 'Teknisk SEO, hurtige sider, en struktur Google forstår, og lokal synlighed med jeres Google-virksomhedsprofil.' },
+  { title: 'Tilgængelighed', text: 'WCAG 2.1 AA og test med skærmlæser. Det hjælper alle brugere, og mange webshops er omfattet af EU’s tilgængelighedskrav.' },
+  { title: 'Klart sprog', text: 'Tekster, der er lette at læse og forstå, skrevet sammen med vores lingvist. Også i en let-læst udgave, hvis I har brug for det.' },
+];
+
+const steps = [
+  { title: 'Samtale', text: 'Vi finder ud af, hvem siden er til, og hvad den skal få dem til at gøre.' },
+  { title: 'Struktur og tekst', text: 'Vi laver sidens opbygning og tekster sammen med jer, før vi designer noget.' },
+  { title: 'Design og bygning', text: 'I ser siden undervejs og kan nå at sige til, mens det er billigt at ændre.' },
+  { title: 'Test', text: 'På mobil, med tastatur og med skærmlæser. Og med jeres egne øjne.' },
+  { title: 'Lancering og drift', text: 'Vi lægger siden live og kan holde den kørende bagefter, hvis I vil.' },
+];
+---
+<BaseLayout
+  title="Hjemmesider og SEO"
+  description="Hjemmesider til små virksomheder med god struktur, lokal SEO, tilgængelighed efter WCAG 2.1 AA og klart sprog."
+>
+  <Hero
+    title="Hjemmesider, folk kan finde og bruge"
+    lede={`En hjemmeside skal få de rigtige mennesker til at ringe, skrive eller købe. Vi bygger dem hurtige, tilgængelige og lette at læse. Priser fra ${kr(prices.websiteSimple, 'da')} ekskl. moms.`}
+  >
+    <a class="button" href="/kontakt/">Fortæl os om jeres side</a>
+    <a href="/priser/">Se priser</a>
+    <ServiceArt slot="art" name="web" />
+  </Hero>
+  <Section title="Det får I">
+    <CardGrid items={offer} />
+  </Section>
+  <Section title="Sådan arbejder vi" tone="soft">
+    <Steps items={steps} />
+  </Section>
+  <CtaBand
+    title="Har I allerede en hjemmeside?"
+    text="Så starter vi gerne med at kigge på den. Et Systemtjek kan også dække jeres hjemmeside, SEO og tilgængelighed."
+    href="/kontakt/"
+    label="Skriv til os"
+  />
+</BaseLayout>

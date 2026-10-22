@@ -1,0 +1,49 @@
+---
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/routes';
+import { flowerHead, paths } from '../lib/art';
+
+interface Props { locale: Locale; switchHref: string }
+const { locale, switchHref } = Astro.props;
+const t = ui[locale];
+const here = Astro.url.pathname;
+const isCurrent = (href: string) => (here.startsWith(href) ? 'page' : undefined);
+const mark = paths(flowerHead(16, 16, 15, 9).filter((p) => p.tone < 2));
+---
+<header class="top night">
+  <div class="wrap bar">
+    <a class="mark" href={locale === 'da' ? '/' : '/en/'}>
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        {mark.map((p) => <path d={p.d} fill="none" stroke-width={p.w} stroke-linecap="round" class={`t${p.tone}`} />)}
+      </svg>
+      <span>dandelion</span>
+    </a>
+    <nav aria-label={t.navLabel}>
+      <ul>
+        {t.nav.map((item) => (
+          <li><a href={item.href} aria-current={isCurrent(item.href)}>{item.label}</a></li>
+        ))}
+        <li class="lang-item"><a class="lang" href={switchHref} hreflang={t.switchLang} lang={t.switchLang}>{t.switchLabel}</a></li>
+      </ul>
+    </nav>
+    <a class="button cta" href={t.navCta.href} aria-current={isCurrent(t.navCta.href)}>{t.navCta.label}</a>
+  </div>
+</header>
+
+<style>
+  .top { background: var(--night-sky); padding: 1.5rem 0 0; position: relative; z-index: 2; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; }
+  .mark { display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.45rem; letter-spacing: -0.03em; text-decoration: none; color: #FFFFFF; margin-right: auto; }
+  .mark svg { width: 2rem; height: 2rem; }
+  .mark path.t0 { stroke: var(--yellow); }
+  .mark path.t1 { stroke: #E8AE10; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.5rem; }
+  nav a { text-decoration: none; font-weight: 500; color: var(--night-text); }
+  nav a:hover, nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: 0.15em; text-underline-offset: 0.35em; }
+  .lang { color: var(--night-muted); font-size: var(--text-small); }
+  .cta { padding: 0.6rem 1.3rem; }
+  @media (max-width: 900px) {
+    nav { order: 3; flex-basis: 100%; }
+    ul { gap: 0.3rem 1.1rem; font-size: var(--text-small); }
+  }
+</style>

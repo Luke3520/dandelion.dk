@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { notes: CollectionEntry<'noter'>[] }
+const { notes } = Astro.props;
+const date = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<ul class="notes">
+  {notes.map(({ id, data }) => (
+    <li>
+      <h3><a href={`/noter/${id}/`}>{data.title}</a></h3>
+      <p>{data.description}</p>
+      <p class="date"><time datetime={data.date.toISOString().slice(0, 10)}>{date.format(data.date)}</time></p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .notes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  li { position: relative; display: flex; flex-direction: column; border-top: 3px solid var(--yellow); padding-top: 1.25rem; }
+  h3 { font-family: var(--font-display); font-weight: var(--display-weight); font-variation-settings: var(--display-soft); font-size: 1.5rem; line-height: 1.2; margin-bottom: 0.75rem; }
+  h3 a { text-decoration: none; }
+  h3 a:hover { text-decoration: underline; text-decoration-color: var(--yellow); }
+  p { margin: 0 0 0.5rem; color: var(--muted); }
+  .date { font-size: var(--text-small); order: -1; margin-bottom: 0.5rem; }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,16 @@
+---
+// The curved edge between colour fields. "valley" dips in the middle (under the hero), "dome" rises (above the footer).
+interface Props { fill: string; shape?: 'valley' | 'dome'; class?: string }
+const { fill, shape = 'valley', class: className } = Astro.props;
+const d =
+  shape === 'valley'
+    ? 'M0 8 C360 92 1080 92 1440 8 L1440 100 L0 100 Z'
+    : 'M0 92 C360 8 1080 8 1440 92 L1440 100 L0 100 Z';
+---
+<svg class:list={['hill', className]} viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path d={d} fill={fill} />
+</svg>
+
+<style>
+  .hill { display: block; width: 100%; height: var(--hill); }
+</style>

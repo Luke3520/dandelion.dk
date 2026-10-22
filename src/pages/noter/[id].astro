@@ -1,0 +1,41 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Prose from '../../components/Prose.astro';
+import { getNotes } from '../../lib/collections';
+
+export async function getStaticPaths() {
+  return (await getNotes()).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+const date = new Intl.DateTimeFormat('da-DK', { day: 'numeric', month: 'long', year: 'numeric' }).format(data.date);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.date.toISOString().slice(0, 10),
+  inLanguage: 'da',
+  publisher: { '@type': 'Organization', name: 'Dandelion', url: 'https://dandelion.dk' },
+};
+---
+<BaseLayout title={data.title} description={data.description} jsonLd={jsonLd}>
+  <article>
+    <Hero title={data.title}>
+      <p slot="before" class="back"><a href="/noter/">Alle noter</a></p>
+      <p slot="after" class="muted"><time datetime={data.date.toISOString().slice(0, 10)}>{date}</time></p>
+    </Hero>
+    <Section>
+      <Prose><Content /></Prose>
+    </Section>
+  </article>
+</BaseLayout>
+
+<style>
+  .back { font-size: var(--text-small); }
+</style>

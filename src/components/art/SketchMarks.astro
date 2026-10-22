@@ -1,0 +1,18 @@
+---
+// Renders the paths from lib/sketch.ts. Colour fields are shifted slightly off their outlines.
+import type { Mark } from '../../lib/sketch';
+
+interface Props { marks: Mark[] }
+const { marks } = Astro.props;
+---
+{marks.map((m) => (
+  <path
+    d={m.d}
+    fill={m.fill ?? 'none'}
+    stroke={m.stroke}
+    stroke-width={m.width}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform={m.dx || m.dy ? `translate(${m.dx ?? 0} ${m.dy ?? 0})` : undefined}
+  />
+))}

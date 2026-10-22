@@ -1,0 +1,30 @@
+---
+// One colour field. `soft` is kept as an alias for `mist`.
+// `hideTitle` keeps the heading for screen readers (and a correct heading order) without showing it.
+interface Props { title?: string; id?: string; intro?: string; tone?: 'plain' | 'soft' | 'mist' | 'yellow' | 'night'; center?: boolean; hideTitle?: boolean }
+const { title, id, intro, tone = 'plain', center = false, hideTitle = false } = Astro.props;
+const field = tone === 'soft' ? 'mist' : tone;
+---
+<section id={id} class:list={['section', field, { night: field === 'night', center }]}>
+  <div class="wrap">
+    {title && <h2 class:list={{ 'visually-hidden': hideTitle }}>{title}</h2>}
+    {intro && <p class="intro">{intro}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section { padding: var(--section) 0; }
+  .plain + .plain { padding-top: 0; }
+  .mist { background: var(--mist); }
+  .yellow { background: var(--yellow); }
+  .yellow :focus-visible { outline-color: var(--ink); }
+  .night { background: var(--night); }
+  .night h2 { color: #FFFFFF; }
+  .intro { max-width: var(--measure); font-size: var(--lede); margin-bottom: 2.5rem; }
+  .plain .intro, .mist .intro { color: var(--muted); }
+  .night .intro { color: var(--night-muted); }
+  .center { text-align: center; }
+  .center h2, .center .intro { margin-inline: auto; }
+  .center h2 { max-width: 22ch; }
+</style>

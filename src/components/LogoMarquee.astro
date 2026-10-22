@@ -1,0 +1,32 @@
+---
+// A CSS-only scrolling row of client logos. Renders nothing until at least four named clients have a logo.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { cases: CollectionEntry<'cases'>[]; label: string }
+const { cases, label } = Astro.props;
+const logos = cases.filter((c) => c.data.named && c.data.client && c.data.logo);
+---
+{logos.length >= 4 && (
+  <div class="marquee" role="region" aria-label={label}>
+    <ul class="track">
+      {[...logos, ...logos].map((c, i) => (
+        <li aria-hidden={i >= logos.length ? 'true' : undefined}>
+          <img src={c.data.logo} alt={i >= logos.length ? '' : c.data.client} height="40" loading="lazy" />
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<style>
+  .marquee { overflow: hidden; padding: 0 0 3.5rem; }
+  .track { list-style: none; margin: 0; padding: 0; display: flex; gap: 4rem; width: max-content; animation: scroll 40s linear infinite; }
+  .marquee:hover .track { animation-play-state: paused; }
+  img { height: 40px; width: auto; filter: grayscale(1); opacity: 0.8; }
+  :global(.night) img { filter: brightness(0) invert(1); opacity: 0.85; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; flex-wrap: wrap; width: auto; }
+    .track li[aria-hidden] { display: none; }
+  }
+</style>

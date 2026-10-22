@@ -1,0 +1,66 @@
+---
+// Case cards in rotating colour fields. `row` scrolls sideways when there are more cases than fit; `grid` wraps.
+// The title is the link; it stretches over the whole card.
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '../i18n/routes';
+import Arrow from './Arrow.astro';
+
+interface Props { cases: CollectionEntry<'cases'>[]; locale?: Locale; layout?: 'row' | 'grid'; label?: string }
+const { cases, locale = 'da', layout = 'grid', label } = Astro.props;
+const text = {
+  da: { inProgress: 'I gang', readMore: 'Læs om opgaven', pillar: { hjemmesider: 'Hjemmeside', systemer: 'System', raadgivning: 'Rådgivning' } },
+  en: { inProgress: 'In progress', readMore: 'Read the case (in Danish)', pillar: { hjemmesider: 'Website', systemer: 'System', raadgivning: 'Advice' } },
+}[locale];
+const fields = ['f-moss', 'f-stem', 'f-clay', 'f-yellow'];
+const scrolls = layout === 'row';
+---
+<div class:list={['frame', { scroller: scrolls }]} role={scrolls ? 'region' : undefined} aria-label={scrolls ? label : undefined} tabindex={scrolls ? 0 : undefined}>
+<ul class:list={['cases', layout]}>
+  {cases.map(({ id, data }, i) => (
+    <li class={fields[i % fields.length]}>
+      <p class="kicker">
+        {text.pillar[data.pillar]}
+        {data.status === 'i-gang' && <span class="tag">{text.inProgress}</span>}
+      </p>
+      <h3><a href={`/arbejde/${id}/`}>{locale === 'en' ? data.titleEn ?? data.title : data.title}</a></h3>
+      <p class="summary">{locale === 'en' ? data.summaryEn ?? data.summary : data.summary}</p>
+      {data.stack.length > 0 && <p class="tech">{data.stack.join(' · ')}</p>}
+      <p class="more" aria-hidden="true">{text.readMore}<Arrow /></p>
+    </li>
+  ))}
+</ul>
+</div>
+
+<style>
+  .cases { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); }
+  .scroller { overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0.25rem; margin: -0.5rem -0.25rem; border-radius: var(--radius); }
+  .scroller:focus-visible { outline: 3px solid var(--yellow); }
+  .row { grid-auto-flow: column; grid-auto-columns: minmax(19rem, 1fr); }
+  .row li { scroll-snap-align: start; }
+
+  li { position: relative; border-radius: var(--radius); padding: 2rem; min-height: 22rem; display: flex; flex-direction: column; transition: transform 0.2s ease; }
+  li:hover { transform: translateY(-4px); }
+  li:focus-within { outline: 3px solid var(--yellow); outline-offset: 3px; }
+  .f-moss { background: var(--night-card); color: var(--night-text); }
+  .f-stem { background: var(--stem); color: #FFFFFF; }
+  .f-clay { background: var(--clay); color: #FFFFFF; }
+  .f-yellow { background: var(--yellow); color: var(--ink); }
+  :global(.plain) .f-moss { background: var(--night); }
+
+  .kicker { font-size: var(--text-small); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 1.25rem; opacity: 0.85; }
+  .tag { margin-left: 0.6rem; font-size: 0.75rem; border: 1px solid currentColor; border-radius: var(--pill); padding: 0.1rem 0.55rem; letter-spacing: 0.02em; }
+  h3 { font-family: var(--font-display); font-weight: var(--display-weight); font-variation-settings: var(--display-soft); font-size: 1.65rem; line-height: 1.2; margin: 0 0 1rem; }
+  h3 a { color: inherit; text-decoration: none; }
+  h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  h3 a:focus-visible { outline: none; }
+  .summary { margin: 0 0 1rem; opacity: 0.9; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .tech { font-size: var(--text-small); opacity: 0.8; margin: 0; }
+  .more { margin: auto 0 0; padding-top: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.6rem; }
+  li:hover .more :global(.arrow) { transform: translateX(4px); }
+
+  @media (max-width: 760px) {
+    .row { grid-auto-columns: 85%; }
+    li { min-height: 0; }
+  }
+</style>

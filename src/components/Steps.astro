@@ -1,0 +1,21 @@
+---
+export interface Step { title: string; text: string }
+interface Props { items: Step[] }
+const { items } = Astro.props;
+---
+<ol class="steps">
+  {items.map((step) => (
+    <li>
+      <h3>{step.title}</h3>
+      <p>{step.text}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 2rem; max-width: 48rem; }
+  li { counter-increment: step; display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); column-gap: 1.25rem; }
+  li::before { content: counter(step); grid-row: span 2; width: 2.75rem; height: 2.75rem; border-radius: 50%; background: var(--yellow); color: var(--ink); display: grid; place-items: center; font-family: var(--font-display); font-variation-settings: var(--display-soft); font-size: 1.35rem; }
+  h3 { margin: 0.5rem 0 0.25rem; }
+  p { margin: 0; color: var(--muted); }
+</style>

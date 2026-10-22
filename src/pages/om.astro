@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SpotArt from '../components/art/SpotArt.astro';
+import Section from '../components/Section.astro';
+import CardGrid from '../components/CardGrid.astro';
+import PeopleList from '../components/PeopleList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getPeople } from '../lib/collections';
+
+const team = await getPeople('team');
+
+const values = [
+  { title: 'Ærlige priser', text: 'Vi viser vores priser og giver en fast pris, før vi går i gang.' },
+  { title: 'Tilgængelighed som standard', text: 'Alt, vi bygger, skal kunne bruges af alle.' },
+  { title: 'Sikkerhed fra dag ét', text: 'Det er billigere at bygge sikkert fra start end at rette bagefter.' },
+  { title: 'Klart sprog', text: 'Ingen teknisk jargon. I skal kunne forstå, hvad I køber.' },
+];
+---
+<BaseLayout
+  title="Om os"
+  description="Dandelion er et lille digitalt studie i København. Vi står for hele opgaven og henter specialister ind fra vores netværk, når det er nødvendigt."
+  routeKey="about"
+>
+  <Hero
+    title="Et lille studie, der tager ansvar for hele opgaven"
+    lede="Dandelion er et lille digitalt studie i København for virksomheder, der er for små til et it-hus, men for store til papir og regneark."
+  />
+  <Section title="Sådan er vi organiseret">
+    <div class="split">
+      <div class="measure">
+        <p>Vi fungerer som totalentreprenør. Vi står for hele opgaven, fra rådgivning og design til det færdige resultat, og tager ansvaret for det. Når en opgave kræver en specialist, henter vi en ind fra vores netværk, og I ved altid, hvem der laver hvad.</p>
+        <p>Certificeringer hører til personen, ikke til firmaet. Derfor nævner vi altid, hvem der har hvilken certificering, når det er relevant.</p>
+      </div>
+      <div class="art"><SpotArt name="desk" /></div>
+    </div>
+  </Section>
+  <Section title="Hvem står bag" tone="soft">
+    <PeopleList people={team} withBio />
+  </Section>
+  <Section title="Det holder vi fast i">
+    <CardGrid items={values} columns={4} />
+  </Section>
+  <CtaBand title="Lad os tage en snak" text="Fortæl kort, hvad der driller, så vender vi tilbage." href="/kontakt/" label="Skriv til os" />
+</BaseLayout>
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 2rem 4rem; align-items: center; }
+  .split .art { width: 100%; }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; } .split .art { max-width: 20rem; } }
+</style>

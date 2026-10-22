@@ -1,0 +1,14 @@
+---
+// Styles long text: Markdown bodies, privacy policy, notes.
+---
+<div class="prose"><slot /></div>
+
+<style>
+  .prose { max-width: var(--measure); }
+  .prose :global(h2) { font-size: 1.9rem; margin: 2.75rem 0 1rem; }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(h3) { margin: 2rem 0 0.5rem; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.25rem; margin: 0 0 1rem; }
+  .prose :global(li) { margin-bottom: 0.4rem; }
+  .prose :global(blockquote) { margin: 1.5rem 0; padding-left: 1rem; border-left: 4px solid var(--yellow); }
+</style>

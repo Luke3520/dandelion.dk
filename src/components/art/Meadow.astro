@@ -1,0 +1,94 @@
+---
+// The night meadow behind the hero: stars, dandelions on the hill and seeds drifting off the seed head.
+// "home" shows flowers on the left and a seed head on the right. "page" shows only a small seed head.
+import SketchMarks from './SketchMarks.astro';
+import { stars } from '../../lib/art';
+import { plant } from '../../lib/plants';
+import { seedMarks } from '../../lib/sketch';
+
+// `plants: false` leaves only the stars, for heroes that carry their own drawing.
+interface Props { variant?: 'home' | 'page'; plants?: boolean }
+const { variant = 'home', plants: showPlants = true } = Astro.props;
+const sky = stars(variant === 'home' ? 46 : 28, 1440, 640);
+const seed = seedMarks(0, -16, 1.3, 90);
+// Plants drawn in the shared hand-drawn style. Coordinates are in each svg's own box; the ground is y = 260.
+const leftPlants = [
+  plant(90, 260, { height: 130, lean: -14, seed: 4, scale: 0.85 }),
+  plant(190, 260, { height: 200, lean: 8, seed: 5 }),
+  plant(282, 260, { height: 95, lean: 18, seed: 6, leaves: false, scale: 0.8 }),
+];
+const rightPlants = variant === 'home'
+  ? [plant(210, 260, { height: 210, lean: -10, head: 'clock', seed: 7 }), plant(100, 260, { height: 110, lean: 10, seed: 8, scale: 0.85 })]
+  : [plant(100, 260, { height: 190, lean: -8, head: 'clock', leaves: false, seed: 9, scale: 0.9 })];
+// Drifting seeds: where they start (percent of the hero), how far they travel and how long it takes.
+const drifting = (variant === 'home'
+  ? [
+      { x: 86, y: 52, dx: -38, dy: -42, dur: 19, delay: 0, s: 0.9 },
+      { x: 88, y: 58, dx: -55, dy: -30, dur: 24, delay: 5, s: 0.7 },
+      { x: 84, y: 55, dx: -24, dy: -48, dur: 21, delay: 10, s: 0.8 },
+      { x: 89, y: 50, dx: -66, dy: -22, dur: 27, delay: 14, s: 0.6 },
+      { x: 85, y: 57, dx: -45, dy: -36, dur: 23, delay: 18, s: 0.75 },
+    ]
+  : [
+      { x: 90, y: 55, dx: -30, dy: -40, dur: 20, delay: 0, s: 0.7 },
+      { x: 91, y: 60, dx: -46, dy: -26, dur: 25, delay: 8, s: 0.6 },
+    ]
+).map((d) => `--x:${d.x}%;--y:${d.y}%;--dx:${d.dx}vw;--dy:${d.dy}vh;--dur:${d.dur}s;--delay:-${d.delay}s;--s:${d.s}`);
+---
+<div class:list={['meadow', variant]} aria-hidden="true">
+  <svg class="stars" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice" focusable="false">
+    {sky.map((s) => (
+      <circle cx={s.x} cy={s.y} r={s.r} opacity={s.o} class={s.twinkle ? 'twinkle' : undefined} style={s.twinkle ? `animation-delay:-${s.delay}s` : undefined} />
+    ))}
+  </svg>
+
+  {variant === 'home' && (
+    <svg class="plants left" viewBox="0 0 360 270" focusable="false">
+      {leftPlants.map((p) => <><SketchMarks marks={p.rosette} /><g class="sway"><SketchMarks marks={p.top} /></g></>)}
+    </svg>
+  )}
+
+  {showPlants && <svg class="plants right" viewBox={variant === 'home' ? '0 0 300 270' : '0 0 200 270'} focusable="false">
+    {rightPlants.map((p) => <><SketchMarks marks={p.rosette} /><g class="sway"><SketchMarks marks={p.top} /></g></>)}
+  </svg>}
+
+  {showPlants && drifting.map((style) => (
+    <svg class="seed" viewBox="-20 -20 40 62" style={style} focusable="false"><SketchMarks marks={seed} /></svg>
+  ))}
+</div>
+
+<style>
+  /* On the night sky, outlines are a shade darker than the sky and seed heads are drawn in light lines. */
+  .meadow { position: absolute; inset: 0; overflow: hidden; pointer-events: none; color: var(--night-text); --ink: #141d10; --seed: var(--night-text); }
+  .sway { transform-box: view-box; animation: sway 9s ease-in-out infinite; }
+  .plants:first-of-type .sway:nth-child(4) { animation-duration: 11s; animation-delay: -4s; }
+  @keyframes sway { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(0.8deg); } }
+  .stars { position: absolute; inset: 0; width: 100%; height: 100%; fill: var(--night-text); }
+  .twinkle { animation: twinkle 5s ease-in-out infinite; }
+  @keyframes twinkle { 50% { opacity: 0.1; } }
+
+  .plants { position: absolute; bottom: calc(var(--hill) - 1.25rem); height: clamp(8rem, 19vw, 16rem); width: auto; overflow: visible; }
+  .left { left: clamp(-3rem, -2vw, 0rem); }
+  .right { right: clamp(-2rem, 1vw, 2rem); }
+  .page .right { height: clamp(6rem, 13vw, 11rem); right: clamp(0rem, 4vw, 4rem); }
+
+  .seed { --ink: var(--night-text); position: absolute; left: var(--x); top: var(--y); width: calc(1.6rem * var(--s)); height: auto; overflow: visible; animation: drift var(--dur) linear var(--delay) infinite; opacity: 0; }
+  @keyframes drift {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    8% { opacity: 0.9; }
+    50% { transform: translate(calc(var(--dx) * 0.5), calc(var(--dy) * 0.55)) rotate(-14deg); }
+    85% { opacity: 0.7; }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(6deg); opacity: 0; }
+  }
+
+  @media (max-width: 760px) {
+    .home .plants { height: 7rem; }
+    .home .left { left: -2.5rem; }
+    .home .right { right: -2rem; }
+    .page .right { display: none; }
+    .page .seed { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seed { opacity: 0.8; transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4)); }
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+// "Vi vil gerne vide": what the form will ask, shown before the form so it feels less daunting.
+interface Props { title: string; items: string[] }
+const { title, items } = Astro.props;
+---
+<div class="intake">
+  <h2 class="bar">{title}</h2>
+  <ul>
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>
+
+<style>
+  .intake { background: var(--paper); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 0 var(--line); }
+  .bar { background: var(--yellow); margin: 0; padding: 1rem 1.75rem; font-size: 1.5rem; }
+  ul { list-style: none; margin: 0; padding: 1.75rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+  li { background: var(--mist); border-left: 4px solid var(--stem); border-radius: 0 var(--radius-small) var(--radius-small) 0; padding: 1.25rem; font-weight: 700; min-height: 5.5rem; }
+  @media (max-width: 900px) { ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 500px) { ul { grid-template-columns: 1fr; } li { min-height: 0; } }
+</style>

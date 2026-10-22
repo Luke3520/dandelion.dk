@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import RequestForm from '../components/RequestForm.astro';
+import SpotArt from '../components/art/SpotArt.astro';
+import { site } from '../site';
+---
+<BaseLayout title="Kontakt" description="Skriv til Dandelion om hjemmesider, systemer, integrationer eller et Systemtjek." routeKey="contact">
+  <Hero title="Kontakt" lede="Fortæl kort, hvad der driller. Vil I booke et Systemtjek, så vælg det i listen, så finder vi en tid." />
+  <Section>
+    <div class="layout">
+      <div class="write">
+        <h2>Skriv til os</h2>
+        <RequestForm kind="contact" />
+      </div>
+      <div class="direct night">
+        <h2>Direkte</h2>
+        <p><a class="email" href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><a href={site.linkedin}>LinkedIn</a></p>
+        <p class="muted">{site.name}<br>CVR {site.cvr}<br>{site.postalCode} {site.city}</p>
+        <div class="art"><SpotArt name="letter" /></div>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); border-radius: var(--radius); overflow: hidden; }
+  .write { background: var(--mist); padding: clamp(1.5rem, 4vw, 3.5rem); }
+  .direct { padding: clamp(1.5rem, 4vw, 3.5rem); display: flex; flex-direction: column; }
+  .layout h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); }
+  .direct h2 { color: #FFFFFF; }
+  .direct a { word-break: break-word; color: #FFFFFF; }
+  .direct .email { font-size: 1.25rem; font-weight: 700; }
+  /* Light ink on the dark panel. */
+  .direct .art { --ink: var(--night-text); width: 100%; max-width: 19rem; margin-top: auto; padding-top: 2.5rem; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+</style>
